@@ -1119,6 +1119,19 @@ impl State {
         return arg.token_id as u32;
     }
 
+    pub fn ext_batch_mint(
+        &mut self,
+        caller: &Principal,
+        ext_args: Vec<ExtMintArg>,
+    ) -> Vec<ExtTokenIndex> {
+        let mut token_ids: Vec<ExtTokenIndex> = vec![];
+        for ext_arg in ext_args {
+            let token_id = self.ext_mint(caller, ext_arg);
+            token_ids.push(token_id);
+        }
+        return token_ids;
+    }
+
     pub fn ext_supply(&self) -> ExtSupplyResult {
         Ok(self.tokens.len() as u128)
     }
