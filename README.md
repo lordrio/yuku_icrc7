@@ -146,3 +146,7 @@ supply: shared query (token : TokenIdentifier) -> async Result<Balance, CommonEr
 allowance: shared query (request : AllowanceRequest) -> async async Result<Balance, CommonError>;
 
 approve: shared (request : ApproveRequest) -> async ();
+
+### other
+
+batchMintNFT: shared (request : vec MintRequest) -> async ();
