@@ -26,3 +26,12 @@ pub fn ext_mint(arg: ExtMintArg) -> ExtTokenIndex {
     }
     STATE.with(|s| s.borrow_mut().ext_mint(&caller, arg))
 }
+
+#[update(name = "batchMintNFT")]
+pub fn ext_batch_mint(args: Vec<ExtMintArg>) -> Vec<ExtTokenIndex> {
+    let caller = ic_cdk::caller();
+    if caller == Principal::anonymous() {
+        return vec![0];
+    }
+    STATE.with(|s| s.borrow_mut().ext_batch_mint(&caller, args))
+}

@@ -94,6 +94,13 @@ from_subaccount= null;
 })'
 ```
 
+#### Set Minting Authority
+```bash
+dfx canister --network ic call icrc7 icrc7_set_minting_authority '(record {
+    owner = principal "j6jni-euxrr-7s6ef-vb2wt-dovvi-u7772-a6exj-kdhru-swdod-q3w44-uae";                                     
+    subaccount = opt blob "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00";
+})'
+```
 #### Deploying Tansaction Log Canister
 
 ```bash
