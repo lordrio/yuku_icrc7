@@ -8,6 +8,7 @@ use crate::{
     ApprovalArg, ApproveResult, BurnArg, BurnResult, MintArg, MintResult, SyncReceipt, Transaction,
     TransferArg, TransferResult,
 };
+use icrc_ledger_types::icrc1::account::Account;
 
 #[update]
 pub fn icrc7_mint(arg: MintArg) -> MintResult {
@@ -37,6 +38,12 @@ pub fn icrc7_burn(args: Vec<BurnArg>) -> Vec<Option<BurnResult>> {
 pub fn icrc7_approve(args: Vec<ApprovalArg>) -> Vec<Option<ApproveResult>> {
     let caller = ic_cdk::caller();
     STATE.with(|s| s.borrow_mut().approve(&caller, args))
+}
+
+#[update(guard = "owner_guard")]
+pub fn icrc7_set_minting_authority(minting_account: Account) -> bool {
+    STATE.with(|s| s.borrow_mut().minting_authority = Some(minting_account));
+    return true;
 }
 
 #[update(guard = "owner_guard")]
