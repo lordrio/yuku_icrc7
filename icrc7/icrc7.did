@@ -176,6 +176,7 @@ service : (InitArg) -> {
   icrc7_name : () -> (text) query;
   icrc7_owner_of : (vec nat) -> (vec opt Account) query;
   icrc7_set_archive_log_canister : (principal) -> (bool);
+  icrc7_set_minting_authority : (Account) -> (bool);
   icrc7_supply_cap : () -> (opt nat) query;
   icrc7_supported_standards : () -> (vec Standard) query;
   icrc7_symbol : () -> (text) query;
