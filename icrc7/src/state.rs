@@ -865,7 +865,7 @@ impl State {
             from_subaccount: Some(DEFAULT_SUBACCOUNT.clone()),
             to: to_account,
             token_id,
-            memo: arg.memo.clone(),
+            memo: Some(arg.memo.clone()),
             created_at_time: Some(current_time),
         };
 
@@ -883,7 +883,7 @@ impl State {
                 to: icrc7_arg.to.clone(),
             },
             current_time,
-            arg.memo.clone(),
+            Some(arg.memo.clone()),
         );
         Ok(arg.amount)
     }

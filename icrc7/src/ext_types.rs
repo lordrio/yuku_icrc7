@@ -111,7 +111,7 @@ pub struct ExtTransferArg {
     pub from: User,
     pub to: User,
     pub token: TokenIdentifier,
-    pub memo: Option<Vec<u8>>,
+    pub memo: Vec<u8>,
     pub amount: u128,
     pub notify: bool,
     pub subaccount: Option<Subaccount>,
