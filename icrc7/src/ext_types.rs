@@ -54,6 +54,8 @@ impl TokenIdentifier {
 #[derive(CandidType, Clone, Copy, Hash, Debug, Deserialize)]
 pub struct AccountIdentifier([u8; 32]);
 
+pub type AccountIdentifierHex = String;
+
 impl AccountIdentifier {
     pub fn from_principal(principal: &Principal, subaccount: &Option<Subaccount>) -> Self {
         let subaccount: [u8; 32] = subaccount.unwrap_or_else(|| [0; 32]);
@@ -76,6 +78,10 @@ impl AccountIdentifier {
         result[4..32].copy_from_slice(hash.as_ref());
 
         AccountIdentifier(result)
+    }
+
+    pub fn to_hex(&self) -> String {
+        hex::encode(self.0)
     }
 }
 

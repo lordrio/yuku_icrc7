@@ -3,7 +3,9 @@ use ic_cdk_macros::query;
 
 use crate::{
     ext_types::{
-        AccountIdentifier, ExtAllowanceArg, ExtAllowanceResult, ExtBalanceArg, ExtBalanceResult, ExtBearerResult, ExtMetadata, ExtMetadataResult, ExtSupplyResult, ExtTokenIndex, TokenIdentifier
+        AccountIdentifierHex, ExtAllowanceArg, ExtAllowanceResult, ExtBalanceArg, ExtBalanceResult,
+        ExtBearerResult, ExtMetadata, ExtMetadataResult, ExtSupplyResult, ExtTokenIndex,
+        TokenIdentifier,
     },
     state::STATE,
 };
@@ -39,7 +41,7 @@ pub fn ext_get_minter() -> Principal {
 }
 
 #[query(name = "getRegistry")]
-pub fn ext_get_registry() -> Vec<(ExtTokenIndex, AccountIdentifier)> {
+pub fn ext_get_registry() -> Vec<(ExtTokenIndex, AccountIdentifierHex)> {
     STATE.with(|s| s.borrow().ext_get_registry())
 }
 
@@ -54,6 +56,8 @@ pub fn ext_get_tokens() -> Vec<(ExtTokenIndex, ExtMetadata)> {
 }
 
 #[query(name = "getTokensByIds")]
-pub fn ext_get_tokens_by_ids(token_indexs: Vec<ExtTokenIndex>) -> Vec<(ExtTokenIndex, ExtMetadata)> {
+pub fn ext_get_tokens_by_ids(
+    token_indexs: Vec<ExtTokenIndex>,
+) -> Vec<(ExtTokenIndex, ExtMetadata)> {
     STATE.with(|s| s.borrow().ext_get_tokens_by_ids(token_indexs))
 }

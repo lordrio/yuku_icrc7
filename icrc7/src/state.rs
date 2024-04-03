@@ -6,10 +6,7 @@ use crate::{
         MintError, TransferError,
     },
     ext_types::{
-        AccountIdentifier, ExtAllowanceArg, ExtAllowanceResult, ExtApproveArg, ExtBalanceArg,
-        ExtBalanceResult, ExtBearerResult, ExtMetadata, ExtMetadataResult, ExtMetadataType,
-        ExtMintArg, ExtSupplyResult, ExtTokenIndex, ExtTransferArg, ExtTransferResult,
-        TokenIdentifier,
+        AccountIdentifier, AccountIdentifierHex, ExtAllowanceArg, ExtAllowanceResult, ExtApproveArg, ExtBalanceArg, ExtBalanceResult, ExtBearerResult, ExtMetadata, ExtMetadataResult, ExtMetadataType, ExtMintArg, ExtSupplyResult, ExtTokenIndex, ExtTransferArg, ExtTransferResult, TokenIdentifier
     },
     icrc7_types::{
         BurnResult, Icrc7TokenMetadata, MintArg, MintResult, Transaction, TransactionType,
@@ -1076,14 +1073,14 @@ impl State {
         }
     }
 
-    pub fn ext_get_registry(&self) -> Vec<(ExtTokenIndex, AccountIdentifier)> {
+    pub fn ext_get_registry(&self) -> Vec<(ExtTokenIndex, AccountIdentifierHex)> {
         let mut token_list = vec![];
         self.tokens.iter().for_each(|(id, ref token)| {
             let account_id = AccountIdentifier::from_principal(
                 &token.token_owner.owner,
                 &token.token_owner.subaccount,
             );
-            token_list.push((id as u32, account_id));
+            token_list.push((id as u32, account_id.to_hex()));
         });
         token_list
     }

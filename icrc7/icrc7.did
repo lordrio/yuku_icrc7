@@ -158,7 +158,7 @@ service : (InitArg) -> {
   batchMintNFT : (vec ExtMintArg) -> (vec nat32);
   bearer : (text) -> (ExtBearerResult) query;
   getMinter : () -> (principal) query;
-  getRegistry : () -> (vec record { nat32; vec nat8 }) query;
+  getRegistry : () -> (vec record { nat32; text }) query;
   getTokens : () -> (vec record { nat32; ExtMetadata }) query;
   getTokensByIds : (vec nat32) -> (vec record { nat32; ExtMetadata }) query;
   icrc7_approve : (vec ApprovalArg) -> (vec opt Result);
