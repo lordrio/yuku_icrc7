@@ -148,7 +148,7 @@ type TransferError = variant {
   GenericBatchError : record { message : text; error_code : nat };
   TooOld;
 };
-type User = variant { Address : vec nat8; Principal : principal };
+type User = variant { "principal" : principal; address : text };
 type WalletReceiveResult = record { accepted : nat64 };
 service : (InitArg) -> {
   __get_candid_interface_tmp_hack : () -> (text) query;

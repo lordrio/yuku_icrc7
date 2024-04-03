@@ -91,9 +91,11 @@ impl Default for AccountIdentifier {
     }
 }
 
-#[derive(CandidType, Clone, Copy, Deserialize)]
+#[derive(CandidType, Clone, Deserialize)]
 pub enum User {
-    Address(AccountIdentifier),
+    #[serde(rename = "address")]
+    Address(AccountIdentifierHex),
+    #[serde(rename = "principal")]
     Principal(Principal),
 }
 
