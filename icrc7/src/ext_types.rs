@@ -158,13 +158,13 @@ pub struct ExtBearerResult {
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
 pub struct ExtMetadataType {
-    pub metadata: Vec<u8>,
+    pub metadata: Option<Vec<u8>>,
 }
 
 impl ExtMetadataType {
     pub fn new(metadata: String) -> Self {
         Self {
-            metadata: metadata.into_bytes(),
+            metadata: Some(metadata.into_bytes()),
         }
     }
 }
