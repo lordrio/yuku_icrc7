@@ -120,10 +120,12 @@ pub struct ExtBalanceArg {
 
 // pub type ExtBalanceResult = Result<Balance, ExtCommonError>;
 
-#[derive(CandidType, Clone, Default, Deserialize)]
-pub struct ExtBalanceResult {
-    pub ok: Balance,
-    pub err: Option<ExtCommonError>,
+#[derive(CandidType, Clone, Deserialize)]
+pub enum ExtBalanceResult {
+    #[serde(rename = "ok")]
+    Ok(Balance),
+    #[serde(rename = "err")]
+    Err(ExtCommonError),
 }
 
 #[derive(CandidType, Deserialize, Clone)]
@@ -150,18 +152,22 @@ pub struct ExtAllowanceArg {
 
 // pub type ExtAllowanceResult = Result<Balance, ExtCommonError>;
 
-#[derive(CandidType, Clone, Default, Deserialize)]
-pub struct ExtAllowanceResult {
-    pub ok: Balance,
-    pub err: Option<ExtCommonError>,
+#[derive(CandidType, Clone, Deserialize)]
+pub enum ExtAllowanceResult {
+    #[serde(rename = "ok")]
+    Ok(Balance),
+    #[serde(rename = "err")]
+    Err(ExtCommonError),
 }
 
 // pub type ExtBearerResult = Result<AccountIdentifier, ExtCommonError>;
 
-#[derive(CandidType, Clone, Default, Deserialize)]
-pub struct ExtBearerResult {
-    pub ok: AccountIdentifier,
-    pub err: Option<ExtCommonError>,
+#[derive(CandidType, Clone, Deserialize)]
+pub enum ExtBearerResult {
+    #[serde(rename = "ok")]
+    Ok(AccountIdentifier),
+    #[serde(rename = "err")]
+    Err(ExtCommonError),
 }
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
@@ -193,10 +199,12 @@ impl Default for ExtMetadata {
 
 // pub type ExtMetadataResult = Result<ExtMetadata, ExtCommonError>;
 
-#[derive(CandidType, Clone, Default, Deserialize)]
-pub struct ExtMetadataResult {
-    pub ok: ExtMetadata,
-    pub err: Option<ExtCommonError>,
+#[derive(CandidType, Clone, Deserialize)]
+pub enum ExtMetadataResult {
+    #[serde(rename = "ok")]
+    Ok(ExtMetadata),
+    #[serde(rename = "err")]
+    Err(ExtCommonError),
 }
 
 #[derive(CandidType, Deserialize, Clone)]
@@ -206,12 +214,6 @@ pub struct ExtMintArg {
 }
 
 // pub type ExtSupplyResult = Result<Balance, ExtCommonError>;
-
-// #[derive(CandidType, Clone, Default, Deserialize)]
-// pub struct ExtSupplyResult {
-//     pub ok: Balance,
-//     pub err: String,
-// }
 
 #[derive(CandidType, Clone, Deserialize)]
 pub enum ExtSupplyResult {

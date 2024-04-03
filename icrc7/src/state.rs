@@ -947,59 +947,47 @@ impl State {
 
     pub fn ext_balance(&self, arg: ExtBalanceArg) -> ExtBalanceResult {
         let canister_id = ic_cdk::api::id();
-        let mut result = ExtBalanceResult::default();
+
         let token_id = match arg.token.parse_token_index(canister_id) {
             Ok(token_id) => token_id,
-            Err(_) => {
-                result.err = Some(ExtCommonError::InvalidToken(arg.token));
-                return result;
-            }
+            Err(_) => return ExtBalanceResult::Err(ExtCommonError::InvalidToken(arg.token)),
         };
 
         let user = match user_transformer(arg.user) {
             Some(account) => account,
             None => {
-                result.err = Some(ExtCommonError::Other(
+                return ExtBalanceResult::Err(ExtCommonError::Other(
                     "User not support address".to_string(),
-                ));
-                return result;
+                ))
             }
         };
 
         if let Some(ref token) = self.tokens.get(&token_id) {
             if token.token_owner == user {
-                result.ok = 1;
-                return result;
+                return ExtBalanceResult::Ok(1);
             } else {
-                result.ok = 0;
-                return result;
+                return ExtBalanceResult::Ok(0);
             }
         }
 
-        result.err = Some(ExtCommonError::InvalidToken(arg.token));
-        return result;
+        return ExtBalanceResult::Err(ExtCommonError::InvalidToken(arg.token));
     }
 
     pub fn ext_allowance(&self, arg: ExtAllowanceArg) -> ExtAllowanceResult {
         let canister_id = ic_cdk::api::id();
         let current_time = ic_cdk::api::time();
-        let mut result = ExtAllowanceResult::default();
 
         let token_id = match arg.token.parse_token_index(canister_id) {
             Ok(token_id) => token_id,
-            Err(_) => {
-                result.err = Some(ExtCommonError::InvalidToken(arg.token));
-                return result;
-            }
+            Err(_) => return ExtAllowanceResult::Err(ExtCommonError::InvalidToken(arg.token)),
         };
 
         let user = match user_transformer(arg.owner) {
             Some(account) => account,
             None => {
-                result.err = Some(ExtCommonError::Other(
+                return ExtAllowanceResult::Err(ExtCommonError::Other(
                     "User not support address".to_string(),
-                ));
-                return result;
+                ))
             }
         };
 
@@ -1010,55 +998,42 @@ impl State {
 
         let token = self.tokens.get(&token_id).unwrap();
         if token.token_owner != user {
-            result.err = Some(ExtCommonError::Other("Invalid owner".to_string()));
-            return result;
+            return ExtAllowanceResult::Err(ExtCommonError::Other("Invalid owner".to_string()));
         }
 
         if token.approval_check(current_time, &to_account) {
-            result.ok = 1;
-            return result;
+            return ExtAllowanceResult::Ok(1);
         } else {
-            result.ok = 0;
-            return result;
+            return ExtAllowanceResult::Ok(0);
         }
     }
 
     pub fn ext_bearer(&self, token: TokenIdentifier) -> ExtBearerResult {
         let canister_id = ic_cdk::api::id();
-        let mut result = ExtBearerResult::default();
 
         let token_id = match token.parse_token_index(canister_id) {
             Ok(token_id) => token_id,
-            Err(_) => {
-                result.err = Some(ExtCommonError::InvalidToken(token));
-                return result;
-            }
+            Err(_) => return ExtBearerResult::Err(ExtCommonError::InvalidToken(token)),
         };
 
         let token = self.tokens.get(&token_id);
 
         if let Some(token_info) = token {
-            result.ok = AccountIdentifier::from_principal(
+            return ExtBearerResult::Ok(AccountIdentifier::from_principal(
                 &token_info.token_owner.owner,
                 &token_info.token_owner.subaccount,
-            );
-            return result;
+            ));
         } else {
-            result.err = Some(ExtCommonError::Other("Invalid token".to_string()));
-            return result;
+            return ExtBearerResult::Err(ExtCommonError::Other("Invalid token".to_string()));
         }
     }
 
     pub fn ext_metadata(&self, token: TokenIdentifier) -> ExtMetadataResult {
         let canister_id = ic_cdk::api::id();
-        let mut result = ExtMetadataResult::default();
 
         let token_id = match token.parse_token_index(canister_id) {
             Ok(token_id) => token_id,
-            Err(_) => {
-                result.err = Some(ExtCommonError::InvalidToken(token));
-                return result;
-            }
+            Err(_) => return ExtMetadataResult::Err(ExtCommonError::InvalidToken(token)),
         };
 
         let token = self.tokens.get(&token_id);
@@ -1068,11 +1043,9 @@ impl State {
                 .token_description
                 .unwrap_or_else(|| String::from(""));
 
-            result.ok = ExtMetadata::Nonfungible(ExtMetadataType::new(metadata));
-            return result;
+            return ExtMetadataResult::Ok(ExtMetadata::Nonfungible(ExtMetadataType::new(metadata)));
         } else {
-            result.err = Some(ExtCommonError::Other("Invalid token".to_string()));
-            return result;
+            return ExtMetadataResult::Err(ExtCommonError::Other("Invalid token".to_string()));
         }
     }
 
