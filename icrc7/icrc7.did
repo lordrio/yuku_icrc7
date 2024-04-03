@@ -46,7 +46,7 @@ type ExtMetadata = variant { fungible; nonfungible : ExtMetadataType };
 type ExtMetadataResult = record { ok : ExtMetadata; err : opt ExtCommonError };
 type ExtMetadataType = record { metadata : opt vec nat8 };
 type ExtMintArg = record { to : User; metadata : opt vec nat8 };
-type ExtSupplyResult = record { ok : nat; err : text };
+type ExtSupplyResult = variant { ok : nat; err : ExtCommonError };
 type ExtTransferArg = record {
   to : User;
   token : text;

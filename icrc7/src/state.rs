@@ -6,7 +6,10 @@ use crate::{
         MintError, TransferError,
     },
     ext_types::{
-        AccountIdentifier, AccountIdentifierHex, ExtAllowanceArg, ExtAllowanceResult, ExtApproveArg, ExtBalanceArg, ExtBalanceResult, ExtBearerResult, ExtMetadata, ExtMetadataResult, ExtMetadataType, ExtMintArg, ExtSupplyResult, ExtTokenIndex, ExtTransferArg, ExtTransferResult, TokenIdentifier
+        AccountIdentifier, AccountIdentifierHex, ExtAllowanceArg, ExtAllowanceResult,
+        ExtApproveArg, ExtBalanceArg, ExtBalanceResult, ExtBearerResult, ExtMetadata,
+        ExtMetadataResult, ExtMetadataType, ExtMintArg, ExtSupplyResult, ExtTokenIndex,
+        ExtTransferArg, ExtTransferResult, TokenIdentifier,
     },
     icrc7_types::{
         BurnResult, Icrc7TokenMetadata, MintArg, MintResult, Transaction, TransactionType,
@@ -1158,9 +1161,7 @@ impl State {
     }
 
     pub fn ext_supply(&self) -> ExtSupplyResult {
-        let mut result = ExtSupplyResult::default();
-        result.ok = self.tokens.len() as u128;
-        result
+        ExtSupplyResult::Ok(self.tokens.len() as u128)
     }
 
     pub fn ext_get_tokens_by_ids(

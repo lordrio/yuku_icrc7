@@ -207,8 +207,16 @@ pub struct ExtMintArg {
 
 // pub type ExtSupplyResult = Result<Balance, ExtCommonError>;
 
-#[derive(CandidType, Clone, Default, Deserialize)]
-pub struct ExtSupplyResult {
-    pub ok: Balance,
-    pub err: String,
+// #[derive(CandidType, Clone, Default, Deserialize)]
+// pub struct ExtSupplyResult {
+//     pub ok: Balance,
+//     pub err: String,
+// }
+
+#[derive(CandidType, Clone, Deserialize)]
+pub enum ExtSupplyResult {
+    #[serde(rename = "ok")]
+    Ok(Balance),
+    #[serde(rename = "err")]
+    Err(ExtCommonError),
 }
