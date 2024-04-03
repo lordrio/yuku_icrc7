@@ -60,7 +60,6 @@ pub enum ExtTransferError {
     Other(String),
 }
 
-
 #[derive(CandidType, Debug, PartialEq, Deserialize)]
 pub enum InsertTransactionError {
     SyncPending,
@@ -70,4 +69,3 @@ pub enum InsertTransactionError {
     CantWrite,
     InvalidId,
 }
-

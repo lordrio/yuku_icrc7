@@ -79,6 +79,12 @@ impl AccountIdentifier {
     }
 }
 
+impl Default for AccountIdentifier {
+    fn default() -> Self {
+        AccountIdentifier([0u8; 32])
+    }
+}
+
 #[derive(CandidType, Clone, Copy, Deserialize)]
 pub enum User {
     Address(AccountIdentifier),
@@ -104,7 +110,13 @@ pub struct ExtBalanceArg {
     pub token: TokenIdentifier,
 }
 
-pub type ExtBalanceResult = Result<Balance, ExtCommonError>;
+// pub type ExtBalanceResult = Result<Balance, ExtCommonError>;
+
+#[derive(CandidType, Clone, Default, Deserialize)]
+pub struct ExtBalanceResult {
+    pub ok: Balance,
+    pub err: Option<ExtCommonError>,
+}
 
 #[derive(CandidType, Deserialize, Clone)]
 pub struct AllowanceArg {
@@ -128,9 +140,21 @@ pub struct ExtAllowanceArg {
     pub token: TokenIdentifier,
 }
 
-pub type ExtAllowanceResult = Result<Balance, ExtCommonError>;
+// pub type ExtAllowanceResult = Result<Balance, ExtCommonError>;
 
-pub type ExtBearerResult = Result<AccountIdentifier, ExtCommonError>;
+#[derive(CandidType, Clone, Default, Deserialize)]
+pub struct ExtAllowanceResult {
+    pub ok: Balance,
+    pub err: Option<ExtCommonError>,
+}
+
+// pub type ExtBearerResult = Result<AccountIdentifier, ExtCommonError>;
+
+#[derive(CandidType, Clone, Default, Deserialize)]
+pub struct ExtBearerResult {
+    pub ok: AccountIdentifier,
+    pub err: Option<ExtCommonError>,
+}
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
 pub struct ExtMetadataType {
@@ -153,7 +177,19 @@ pub enum ExtMetadata {
     Nonfungible(ExtMetadataType),
 }
 
-pub type ExtMetadataResult = Result<ExtMetadata, ExtCommonError>;
+impl Default for ExtMetadata {
+    fn default() -> Self {
+        ExtMetadata::Fungible
+    }
+}
+
+// pub type ExtMetadataResult = Result<ExtMetadata, ExtCommonError>;
+
+#[derive(CandidType, Clone, Default, Deserialize)]
+pub struct ExtMetadataResult {
+    pub ok: ExtMetadata,
+    pub err: Option<ExtCommonError>,
+}
 
 #[derive(CandidType, Deserialize, Clone)]
 pub struct ExtMintArg {

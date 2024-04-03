@@ -15,6 +15,7 @@ dfx deploy factory --with-cycles 90000000000000
 ```
 
 #### Deploying Icrc7 Canister
+
 ```bash
 dfx deploy icrc7 --argument '(record{                                  
 minting_account= opt record {
@@ -38,6 +39,7 @@ icrc7_name= "ICP Flower"
 ```
 
 #### Minting NFT
+
 ```bash
 dfx canister call icrc7 icrc7_mint '(record{                                  
 to= record {
@@ -54,6 +56,7 @@ token_name= null
 ```
 
 #### Transferring tokens
+
 ```bash
 dfx canister call icrc7 icrc7_transfer '(vec{
 record{
@@ -80,6 +83,7 @@ created_at_time= opt 1710480202901000000
 ```
 
 #### Approve NFT
+
 ```bash
 dfx canister call icrc7 icrc7_approve '(vec{record{                                  
 spender= record {
@@ -95,12 +99,14 @@ from_subaccount= null;
 ```
 
 #### Set Minting Authority
+
 ```bash
 dfx canister --network ic call icrc7 icrc7_set_minting_authority '(record {
     owner = principal "j6jni-euxrr-7s6ef-vb2wt-dovvi-u7772-a6exj-kdhru-swdod-q3w44-uae";                                     
     subaccount = opt blob "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00";
 })'
 ```
+
 #### Deploying Tansaction Log Canister
 
 ```bash
