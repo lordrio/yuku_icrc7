@@ -161,4 +161,10 @@ pub struct ExtMintArg {
     pub metadata: Option<Vec<u8>>,
 }
 
-pub type ExtSupplyResult = Result<Balance, ExtCommonError>;
+// pub type ExtSupplyResult = Result<Balance, ExtCommonError>;
+
+#[derive(CandidType, Clone, Default, Deserialize)]
+pub struct ExtSupplyResult {
+    pub ok: Balance,
+    pub err: String,
+}

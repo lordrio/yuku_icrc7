@@ -1133,7 +1133,9 @@ impl State {
     }
 
     pub fn ext_supply(&self) -> ExtSupplyResult {
-        Ok(self.tokens.len() as u128)
+        let mut result = ExtSupplyResult::default();
+        result.ok = self.tokens.len() as u128;
+        result
     }
 
     pub fn ext_get_tokens_by_ids(
