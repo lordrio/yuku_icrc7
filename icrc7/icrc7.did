@@ -31,6 +31,7 @@ type ExtAllowanceArg = record {
   owner : User;
   spender : principal;
 };
+type ExtAllowanceResult = record { ok : nat; err : opt ExtCommonError };
 type ExtApproveArg = record {
   token : text;
   subaccount : opt vec nat8;
@@ -38,10 +39,14 @@ type ExtApproveArg = record {
   spender : principal;
 };
 type ExtBalanceArg = record { token : text; user : User };
+type ExtBalanceResult = record { ok : nat; err : opt ExtCommonError };
+type ExtBearerResult = record { ok : vec nat8; err : opt ExtCommonError };
 type ExtCommonError = variant { InvalidToken : text; Other : text };
 type ExtMetadata = variant { fungible; nonfungible : ExtMetadataType };
+type ExtMetadataResult = record { ok : ExtMetadata; err : opt ExtCommonError };
 type ExtMetadataType = record { metadata : vec nat8 };
 type ExtMintArg = record { to : User; metadata : opt vec nat8 };
+type ExtSupplyResult = record { ok : nat; err : text };
 type ExtTransferArg = record {
   to : User;
   token : text;
@@ -106,15 +111,12 @@ type MintError = variant {
   GenericBatchError : record { message : text; error_code : nat };
   TokenIdAlreadyExist;
 };
-type Result = variant { Ok : nat; Err : ExtCommonError };
-type Result_1 = variant { Ok : vec nat8; Err : ExtCommonError };
-type Result_2 = variant { Ok : nat; Err : ApprovalError };
-type Result_3 = variant { Ok : nat32; Err : InsertTransactionError };
-type Result_4 = variant { Ok : nat; Err : BurnError };
-type Result_5 = variant { Ok : nat; Err : MintError };
-type Result_6 = variant { Ok : nat; Err : TransferError };
-type Result_7 = variant { Ok : ExtMetadata; Err : ExtCommonError };
-type Result_8 = variant { Ok : nat; Err : ExtTransferError };
+type Result = variant { Ok : nat; Err : ApprovalError };
+type Result_1 = variant { Ok : nat32; Err : InsertTransactionError };
+type Result_2 = variant { Ok : nat; Err : BurnError };
+type Result_3 = variant { Ok : nat; Err : MintError };
+type Result_4 = variant { Ok : nat; Err : TransferError };
+type Result_5 = variant { Ok : nat; Err : ExtTransferError };
 type Standard = record { url : text; name : text };
 type Transaction = record {
   at : nat64;
@@ -150,21 +152,21 @@ type User = variant { Address : vec nat8; Principal : principal };
 type WalletReceiveResult = record { accepted : nat64 };
 service : (InitArg) -> {
   __get_candid_interface_tmp_hack : () -> (text) query;
-  allowance : (ExtAllowanceArg) -> (Result) query;
+  allowance : (ExtAllowanceArg) -> (ExtAllowanceResult) query;
   approve : (ExtApproveArg) -> (bool);
-  balance : (ExtBalanceArg) -> (Result) query;
+  balance : (ExtBalanceArg) -> (ExtBalanceResult) query;
   batchMintNFT : (vec ExtMintArg) -> (vec nat32);
-  bearer : (text) -> (Result_1) query;
+  bearer : (text) -> (ExtBearerResult) query;
   getMinter : () -> (principal) query;
   getRegistry : () -> (vec record { nat32; vec nat8 }) query;
   getTokens : () -> (vec record { nat32; ExtMetadata }) query;
   getTokensByIds : (vec nat32) -> (vec record { nat32; ExtMetadata }) query;
-  icrc7_approve : (vec ApprovalArg) -> (vec opt Result_2);
+  icrc7_approve : (vec ApprovalArg) -> (vec opt Result);
   icrc7_archive_log_canister : () -> (opt principal) query;
-  icrc7_archive_logs : () -> (Result_3);
+  icrc7_archive_logs : () -> (Result_1);
   icrc7_atomic_batch_transfers : () -> (opt bool) query;
   icrc7_balance_of : (vec Account) -> (vec nat) query;
-  icrc7_burn : (vec BurnArg) -> (vec opt Result_4);
+  icrc7_burn : (vec BurnArg) -> (vec opt Result_2);
   icrc7_default_take_value : () -> (opt nat) query;
   icrc7_description : () -> (opt text) query;
   icrc7_logo : () -> (opt text) query;
@@ -172,7 +174,7 @@ service : (InitArg) -> {
   icrc7_max_query_batch_size : () -> (opt nat) query;
   icrc7_max_take_value : () -> (opt nat) query;
   icrc7_max_update_batch_size : () -> (opt nat) query;
-  icrc7_mint : (MintArg) -> (Result_5);
+  icrc7_mint : (MintArg) -> (Result_3);
   icrc7_minting_authority : () -> (opt Account) query;
   icrc7_name : () -> (text) query;
   icrc7_owner_of : (vec nat) -> (vec opt Account) query;
@@ -187,12 +189,12 @@ service : (InitArg) -> {
   icrc7_tokens : (opt nat, opt nat) -> (vec nat) query;
   icrc7_tokens_of : (Account, opt nat, opt nat) -> (vec nat) query;
   icrc7_total_supply : () -> (nat) query;
-  icrc7_transfer : (vec TransferArg) -> (vec opt Result_6);
+  icrc7_transfer : (vec TransferArg) -> (vec opt Result_4);
   icrc7_txn_logs : (nat32, nat32) -> (vec Transaction) query;
-  metadata : (text) -> (Result_7) query;
+  metadata : (text) -> (ExtMetadataResult) query;
   mintNFT : (ExtMintArg) -> (nat32);
-  supply : (text) -> (Result) query;
-  transfer : (ExtTransferArg) -> (Result_8);
+  supply : (text) -> (ExtSupplyResult) query;
+  transfer : (ExtTransferArg) -> (Result_5);
   wallet_balance : () -> (nat) query;
   wallet_receive : () -> (WalletReceiveResult);
 }
