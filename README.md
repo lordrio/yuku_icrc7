@@ -96,6 +96,14 @@ expires_at= null;
 from_subaccount= null;
 }
 })'
+
+dfx canister call icrc7 approve '(record{
+token= "36wh3-oikor-uwjaa-aaaaa-aeaaa-eaqca-aaaab-a";
+subaccount= null;
+allowance= 1;     
+spender= principal "t4egw-clf4w-qbpli-svryg-7yqq6-jt2yj-7v755-mabir-zmx6i-vp4fr-fqe";
+}
+)'
 ```
 
 #### Set Minting Authority
@@ -156,3 +164,5 @@ approve: shared (request : ApproveRequest) -> async ();
 ### other
 
 batchMintNFT: shared (request : vec MintRequest) -> async ();
+
+getTokenIdentifier : (nat) -> (text) query;

@@ -61,3 +61,9 @@ pub fn ext_get_tokens_by_ids(
 ) -> Vec<(ExtTokenIndex, ExtMetadata)> {
     STATE.with(|s| s.borrow().ext_get_tokens_by_ids(token_indexs))
 }
+
+#[query(name = "getTokenIdentifier")]
+pub fn ext_get_token_identifier(index: u128) -> TokenIdentifier {
+    let canister_id = ic_cdk::api::id();
+    TokenIdentifier::parse_token_identifier(canister_id, index)
+}

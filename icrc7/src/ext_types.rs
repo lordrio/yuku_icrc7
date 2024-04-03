@@ -17,11 +17,15 @@ pub type ExtTokenIndex = u32;
 
 impl TokenIdentifier {
     pub fn parse_token_identifier(canister_id: Principal, index: u128) -> Self {
-        let mut array = vec![];
-        array.extend_from_slice(&TDS);
-        array.extend_from_slice(canister_id.as_slice());
-        array.extend_from_slice(&index.to_be_bytes());
-        TokenIdentifier(candid::Principal::try_from_slice(&array).unwrap().to_text())
+        let mut result = [0u8; 18];
+        result[0..4].copy_from_slice(&TDS);
+        result[4..14].copy_from_slice(canister_id.as_slice());
+        result[14..18].copy_from_slice(&(index as u32).to_be_bytes());
+        TokenIdentifier(
+            candid::Principal::try_from(&result.to_vec())
+                .unwrap()
+                .to_text(),
+        )
     }
 
     pub fn parse_token_index(&self, canister_id: Principal) -> Result<u128, ExtCommonError> {
@@ -33,7 +37,10 @@ impl TokenIdentifier {
     }
 
     fn _parse_token_identifier(&self) -> (Vec<u8>, u128) {
-        let array = self.0.as_bytes().to_vec();
+        let array = Principal::from_text(self.0.clone())
+            .unwrap()
+            .as_slice()
+            .to_vec();
         // ic_cdk::println!("parse_token_identifier {:?}", array);
         if array.len() <= 4 || &array[0..4] != TDS {
             return (array, 0);
@@ -51,7 +58,7 @@ impl TokenIdentifier {
     }
 }
 
-#[derive(CandidType, Clone, Copy, Hash, Debug, Deserialize)]
+#[derive(CandidType, Clone, Copy, Debug, Deserialize)]
 pub struct AccountIdentifier([u8; 32]);
 
 pub type AccountIdentifierHex = String;
