@@ -185,3 +185,5 @@ approve: shared (request : ApproveRequest) -> async ();
 batchMintNFT: shared (request : vec MintRequest) -> async ();
 
 getTokenIdentifier : (nat) -> (text) query;
+
+extensions : () -> (vec text) query;
