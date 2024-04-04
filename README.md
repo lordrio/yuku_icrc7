@@ -96,18 +96,12 @@ expires_at= null;
 from_subaccount= null;
 }
 })'
+```
 
+```bash
 dfx canister call icrc7 approve '(record{
 token= "36wh3-oikor-uwjaa-aaaaa-aeaaa-eaqca-aaaab-a";
 owner= null;
-allowance= 1;     
-spender= principal "ajy76-hiaaa-aaaah-aa3mq-cai";
-}
-)'
-
-dfx canister call icrc7 allowance '(record{
-token= "36wh3-oikor-uwjaa-aaaaa-aeaaa-eaqca-aaaab-a";
-subaccount= null;
 allowance= 1;     
 spender= principal "ajy76-hiaaa-aaaah-aa3mq-cai";
 }
