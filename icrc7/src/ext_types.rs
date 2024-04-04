@@ -15,6 +15,14 @@ pub type Balance = u128;
 
 pub type ExtTokenIndex = u32;
 
+pub type Extension = String;
+
+pub static EXTENSIONS: [&str; 3] = [
+    "@ext/common",
+    "@ext/allowance",
+    "@ext/nonfungible",
+];
+
 impl TokenIdentifier {
     pub fn parse_token_identifier(canister_id: Principal, index: u128) -> Self {
         let mut result = [0u8; 18];

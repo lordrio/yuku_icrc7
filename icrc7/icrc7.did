@@ -57,11 +57,11 @@ type ExtTransferArg = record {
   amount : nat;
 };
 type ExtTransferError = variant {
-  CannotNotify : vec nat8;
+  CannotNotify : text;
   InsufficientBalance;
   InvalidToken : text;
   Rejected;
-  Unauthorized : vec nat8;
+  Unauthorized : text;
   Other : text;
 };
 type ExtTransferResult = variant { ok : nat; err : ExtTransferError };
@@ -157,6 +157,7 @@ service : (InitArg) -> {
   balance : (ExtBalanceArg) -> (ExtBalanceResult) query;
   batchMintNFT : (vec ExtMintArg) -> (vec nat32);
   bearer : (text) -> (ExtBearerResult) query;
+  extensions : () -> (vec text) query;
   getMinter : () -> (principal) query;
   getRegistry : () -> (vec record { nat32; text }) query;
   getTokenIdentifier : (nat) -> (text) query;

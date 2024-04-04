@@ -1,7 +1,7 @@
 use candid::CandidType;
 use serde::Deserialize;
 
-use crate::ext_types::{AccountIdentifier, TokenIdentifier};
+use crate::ext_types::{AccountIdentifierHex, TokenIdentifier};
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
 pub enum TransferError {
@@ -52,11 +52,11 @@ pub enum ExtCommonError {
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
 pub enum ExtTransferError {
-    Unauthorized(AccountIdentifier),
+    Unauthorized(AccountIdentifierHex),
     InsufficientBalance,
     Rejected,
     InvalidToken(TokenIdentifier),
-    CannotNotify(AccountIdentifier),
+    CannotNotify(AccountIdentifierHex),
     Other(String),
 }
 

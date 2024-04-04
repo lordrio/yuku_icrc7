@@ -4,8 +4,8 @@ use ic_cdk_macros::query;
 use crate::{
     ext_types::{
         AccountIdentifierHex, ExtAllowanceArg, ExtAllowanceResult, ExtBalanceArg, ExtBalanceResult,
-        ExtBearerResult, ExtMetadata, ExtMetadataResult, ExtSupplyResult, ExtTokenIndex,
-        TokenIdentifier,
+        ExtBearerResult, ExtMetadata, ExtMetadataResult, ExtSupplyResult, ExtTokenIndex, Extension,
+        TokenIdentifier, EXTENSIONS,
     },
     state::STATE,
 };
@@ -66,4 +66,10 @@ pub fn ext_get_tokens_by_ids(
 pub fn ext_get_token_identifier(index: u128) -> TokenIdentifier {
     let canister_id = ic_cdk::api::id();
     TokenIdentifier::parse_token_identifier(canister_id, index)
+}
+
+#[query(name = "extensions")]
+pub fn ext_extensions() -> Vec<Extension> {
+    let extensions: Vec<Extension> = EXTENSIONS.iter().map(|&s| s.to_string()).collect();
+    extensions
 }
