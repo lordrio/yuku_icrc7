@@ -82,6 +82,23 @@ created_at_time= opt 1710480202901000000
 })'
 ```
 
+```bash
+dfx canister call icrc7 transfer '(record{
+  from= variant{
+    "principal"= principal "3yyxm-t5fpe-v32em-ac6lr-xyort-wuscb-dvl4x-3wnwi-hqkyj-xortw-oqe"
+  };
+  to= variant{
+    "principal"= principal "t4egw-clf4w-qbpli-svryg-7yqq6-jt2yj-7v755-mabir-zmx6i-vp4fr-fqe"
+  };
+  token= "vcvu2-lykor-uwjaa-aaaaa-aeaaa-eaqca-aaaab-q";
+  notify= false;
+  memo= blob "123";
+  subaccount= null;
+  amount= 1
+}
+)'
+```
+
 #### Approve NFT
 
 ```bash

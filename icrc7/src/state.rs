@@ -436,6 +436,7 @@ impl State {
             }
             let mut token = self.tokens.get(&arg.token_id).unwrap();
             token.transfer(arg.to.clone());
+            token.approvals.clear();
             self.tokens.insert(arg.token_id, token);
             let txn_id = self.log_transaction(
                 TransactionType::Transfer {
@@ -880,6 +881,7 @@ impl State {
 
         let mut token = self.tokens.get(&icrc7_arg.token_id).unwrap();
         token.transfer(icrc7_arg.to.clone());
+        token.approvals.clear();
         self.tokens.insert(icrc7_arg.token_id, token);
         self.log_transaction(
             TransactionType::Transfer {
