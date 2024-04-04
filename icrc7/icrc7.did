@@ -64,6 +64,7 @@ type ExtTransferError = variant {
   Unauthorized : vec nat8;
   Other : text;
 };
+type ExtTransferResult = variant { ok : nat; err : ExtTransferError };
 type InitArg = record {
   icrc7_supply_cap : opt nat;
   icrc7_description : opt text;
@@ -116,7 +117,6 @@ type Result_1 = variant { Ok : nat32; Err : InsertTransactionError };
 type Result_2 = variant { Ok : nat; Err : BurnError };
 type Result_3 = variant { Ok : nat; Err : MintError };
 type Result_4 = variant { Ok : nat; Err : TransferError };
-type Result_5 = variant { Ok : nat; Err : ExtTransferError };
 type Standard = record { url : text; name : text };
 type Transaction = record {
   at : nat64;
@@ -195,7 +195,7 @@ service : (InitArg) -> {
   metadata : (text) -> (ExtMetadataResult) query;
   mintNFT : (ExtMintArg) -> (nat32);
   supply : (text) -> (ExtSupplyResult) query;
-  transfer : (ExtTransferArg) -> (Result_5);
+  transfer : (ExtTransferArg) -> (ExtTransferResult);
   wallet_balance : () -> (nat) query;
   wallet_receive : () -> (WalletReceiveResult);
 }

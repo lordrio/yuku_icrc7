@@ -689,6 +689,7 @@ impl State {
                 expires_at: arg.expires_at,
             };
             token.approve(approve_arg);
+            self.tokens.insert(arg.clone().token_id, token);
             let tid = self.log_transaction(
                 TransactionType::Approval {
                     tid: arg.token_id,
@@ -823,11 +824,13 @@ impl State {
 
     pub fn ext_transfer(&mut self, caller: &Principal, arg: ExtTransferArg) -> ExtTransferResult {
         if *caller == Principal::anonymous() {
-            return Err(ExtTransferError::Rejected);
+            return ExtTransferResult::Err(ExtTransferError::Rejected);
         }
 
         if arg.amount != 1 {
-            return Err(ExtTransferError::Other("Must use amount of 1".to_string()));
+            return ExtTransferResult::Err(ExtTransferError::Other(
+                "Must use amount of 1".to_string(),
+            ));
         };
 
         let current_time = ic_cdk::api::time();
@@ -841,7 +844,7 @@ impl State {
         let _from_account = match user_transformer(arg.from) {
             Some(account) => account,
             None => {
-                return Err(ExtTransferError::Other(
+                return ExtTransferResult::Err(ExtTransferError::Other(
                     "From User not support address".to_string(),
                 ))
             }
@@ -850,7 +853,7 @@ impl State {
         let to_account = match user_transformer(arg.to) {
             Some(account) => account,
             None => {
-                return Err(ExtTransferError::Other(
+                return ExtTransferResult::Err(ExtTransferError::Other(
                     "To User not support address".to_string(),
                 ))
             }
@@ -858,7 +861,7 @@ impl State {
 
         let token_id = match arg.token.parse_token_index(canister_id) {
             Ok(token_id) => token_id,
-            Err(_) => return Err(ExtTransferError::InvalidToken(arg.token)),
+            Err(_) => return ExtTransferResult::Err(ExtTransferError::InvalidToken(arg.token)),
         };
 
         let icrc7_arg = TransferArg {
@@ -870,7 +873,9 @@ impl State {
         };
 
         if let Err(_) = self.mock_transfer(&current_time, &caller_account, &icrc7_arg) {
-            return Err(ExtTransferError::Other("mock_transfer error".to_string()));
+            return ExtTransferResult::Err(ExtTransferError::Other(
+                "mock_transfer error".to_string(),
+            ));
         }
 
         let mut token = self.tokens.get(&icrc7_arg.token_id).unwrap();
@@ -885,7 +890,7 @@ impl State {
             current_time,
             Some(arg.memo.clone()),
         );
-        Ok(arg.amount)
+        ExtTransferResult::Ok(arg.amount)
     }
 
     pub fn ext_approve(&mut self, caller: &Principal, arg: ExtApproveArg) -> bool {
@@ -933,6 +938,8 @@ impl State {
             expires_at: None,
         };
         token.approve(approve_arg);
+        self.tokens.insert(token_id.clone(), token);
+
         self.log_transaction(
             TransactionType::Approval {
                 tid: icrc7_arg.token_id,

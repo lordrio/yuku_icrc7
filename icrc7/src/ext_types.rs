@@ -117,7 +117,15 @@ pub struct ExtTransferArg {
     pub subaccount: Option<Subaccount>,
 }
 
-pub type ExtTransferResult = Result<u128, ExtTransferError>;
+// pub type ExtTransferResult = Result<u128, ExtTransferError>;
+
+#[derive(CandidType, Clone, Deserialize)]
+pub enum ExtTransferResult {
+    #[serde(rename = "ok")]
+    Ok(u128),
+    #[serde(rename = "err")]
+    Err(ExtTransferError),
+}
 
 #[derive(CandidType, Deserialize, Clone)]
 pub struct ExtBalanceArg {

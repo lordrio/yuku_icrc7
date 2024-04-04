@@ -99,9 +99,17 @@ from_subaccount= null;
 
 dfx canister call icrc7 approve '(record{
 token= "36wh3-oikor-uwjaa-aaaaa-aeaaa-eaqca-aaaab-a";
+owner= null;
+allowance= 1;     
+spender= principal "ajy76-hiaaa-aaaah-aa3mq-cai";
+}
+)'
+
+dfx canister call icrc7 allowance '(record{
+token= "36wh3-oikor-uwjaa-aaaaa-aeaaa-eaqca-aaaab-a";
 subaccount= null;
 allowance= 1;     
-spender= principal "t4egw-clf4w-qbpli-svryg-7yqq6-jt2yj-7v755-mabir-zmx6i-vp4fr-fqe";
+spender= principal "ajy76-hiaaa-aaaah-aa3mq-cai";
 }
 )'
 ```
