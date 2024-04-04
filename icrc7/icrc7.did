@@ -40,7 +40,7 @@ type ExtApproveArg = record {
 };
 type ExtBalanceArg = record { token : text; user : User };
 type ExtBalanceResult = variant { ok : nat; err : ExtCommonError };
-type ExtBearerResult = variant { ok : vec nat8; err : ExtCommonError };
+type ExtBearerResult = variant { ok : text; err : ExtCommonError };
 type ExtCommonError = variant { InvalidToken : text; Other : text };
 type ExtMetadata = variant { fungible; nonfungible : ExtMetadataType };
 type ExtMetadataResult = variant { ok : ExtMetadata; err : ExtCommonError };

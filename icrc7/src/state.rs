@@ -1026,10 +1026,13 @@ impl State {
         let token = self.tokens.get(&token_id);
 
         if let Some(token_info) = token {
-            return ExtBearerResult::Ok(AccountIdentifier::from_principal(
-                &token_info.token_owner.owner,
-                &token_info.token_owner.subaccount,
-            ));
+            return ExtBearerResult::Ok(
+                AccountIdentifier::from_principal(
+                    &token_info.token_owner.owner,
+                    &token_info.token_owner.subaccount,
+                )
+                .to_hex(),
+            );
         } else {
             return ExtBearerResult::Err(ExtCommonError::Other("Invalid token".to_string()));
         }

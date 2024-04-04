@@ -180,7 +180,7 @@ pub enum ExtAllowanceResult {
 #[derive(CandidType, Clone, Deserialize)]
 pub enum ExtBearerResult {
     #[serde(rename = "ok")]
-    Ok(AccountIdentifier),
+    Ok(AccountIdentifierHex),
     #[serde(rename = "err")]
     Err(ExtCommonError),
 }
