@@ -1,8 +1,10 @@
 use candid::Principal;
 use ic_cdk_macros::update;
+use icrc_ledger_types::icrc1::account::DEFAULT_SUBACCOUNT;
 
 use crate::ext_types::{
-    ExtApproveArg, ExtMintArg, ExtTokenIndex, ExtTransferArg, ExtTransferResult,
+    AccountIdentifier, AccountIdentifierHex, ExtApproveArg, ExtMintArg, ExtTokenIndex,
+    ExtTransferArg, ExtTransferResult,
 };
 use crate::state::STATE;
 
@@ -34,4 +36,17 @@ pub fn ext_batch_mint(args: Vec<ExtMintArg>) -> Vec<ExtTokenIndex> {
         return vec![0];
     }
     STATE.with(|s| s.borrow_mut().ext_batch_mint(&caller, args))
+}
+
+#[update(name = "setAccountMapping")]
+pub fn ext_set_account_mapping() -> Option<AccountIdentifierHex> {
+    let caller = ic_cdk::caller();
+    if caller == Principal::anonymous() {
+        return None;
+    }
+    let account_id = AccountIdentifier::from_principal(&caller, &Some(DEFAULT_SUBACCOUNT.clone()));
+    STATE.with(|s| {
+        s.borrow_mut()
+            .ext_set_account_mapping(&caller, account_id.to_hex())
+    })
 }

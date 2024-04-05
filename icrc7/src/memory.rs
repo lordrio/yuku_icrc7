@@ -23,3 +23,7 @@ pub fn get_token_map_memory() -> StableBTreeMap<u128, Icrc7Token, Memory> {
 pub fn get_log_memory() -> StableBTreeMap<u128, Transaction, Memory> {
     StableBTreeMap::init(MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(2))))
 }
+
+pub fn get_ext_account_memory() -> StableBTreeMap<String, String, Memory> {
+    StableBTreeMap::init(MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(3))))
+}

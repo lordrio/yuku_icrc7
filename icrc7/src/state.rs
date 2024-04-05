@@ -9,14 +9,14 @@ use crate::{
         AccountIdentifier, AccountIdentifierHex, ExtAllowanceArg, ExtAllowanceResult,
         ExtApproveArg, ExtBalanceArg, ExtBalanceResult, ExtBearerResult, ExtMetadata,
         ExtMetadataResult, ExtMetadataType, ExtMintArg, ExtSupplyResult, ExtTokenIndex,
-        ExtTransferArg, ExtTransferResult, TokenIdentifier,
+        ExtTransferArg, ExtTransferResult, TokenIdentifier, User,
     },
     icrc7_types::{
         BurnResult, Icrc7TokenMetadata, MintArg, MintResult, Transaction, TransactionType,
         TransferArg, TransferResult,
     },
-    memory::{get_log_memory, get_token_map_memory, Memory},
-    utils::{account_transformer, burn_account, user_transformer},
+    memory::{get_ext_account_memory, get_log_memory, get_token_map_memory, Memory},
+    utils::{account_transformer, burn_account, default_account, user_transformer},
     Approval, ApprovalArg, ApproveResult, BurnArg, SyncReceipt,
 };
 use candid::{CandidType, Decode, Encode, Principal};
@@ -141,6 +141,8 @@ pub struct State {
     pub archive_log_canister: Option<Principal>,
     pub sync_pending_txn_ids: Option<Vec<u128>>,
     pub archive_txn_count: u128,
+    #[serde(skip, default = "get_ext_account_memory")]
+    pub ext_account_mapping: StableBTreeMap<String, String, Memory>,
 }
 
 impl Default for State {
@@ -168,6 +170,7 @@ impl Default for State {
             archive_log_canister: None,
             sync_pending_txn_ids: None,
             archive_txn_count: 0,
+            ext_account_mapping: get_ext_account_memory(),
         }
     }
 }
@@ -823,6 +826,28 @@ impl State {
         return true;
     }
 
+    fn get_mapping_account(&self, user: &User) -> Option<Account> {
+        match user {
+            User::Principal(principal) => {
+                let account = default_account(principal);
+                return Some(account);
+            }
+            User::Address(address) => {
+                let pid = self.ext_account_mapping.get(&address);
+                match pid {
+                    Some(pid) => {
+                        let user_principal = Principal::from_text(pid).unwrap();
+                        let account = default_account(&user_principal);
+                        return Some(account);
+                    }
+                    None => {
+                        return None;
+                    }
+                }
+            }
+        }
+    }
+
     pub fn ext_transfer(&mut self, caller: &Principal, arg: ExtTransferArg) -> ExtTransferResult {
         if *caller == Principal::anonymous() {
             return ExtTransferResult::Err(ExtTransferError::Rejected);
@@ -851,11 +876,13 @@ impl State {
             }
         };
 
-        let to_account = match user_transformer(arg.to) {
+        let mapping_account = self.get_mapping_account(&arg.to);
+
+        let to_account = match mapping_account {
             Some(account) => account,
             None => {
                 return ExtTransferResult::Err(ExtTransferError::Other(
-                    "To User not support address".to_string(),
+                    "To User not support address or not mapping address".to_string(),
                 ))
             }
         };
@@ -1185,6 +1212,16 @@ impl State {
             ));
         });
         token_list
+    }
+
+    pub fn ext_set_account_mapping(
+        &mut self,
+        caller: &Principal,
+        address: String,
+    ) -> Option<AccountIdentifierHex> {
+        let pid = caller.to_string();
+        self.ext_account_mapping.insert(address.clone(), pid);
+        return Some(address);
     }
 }
 

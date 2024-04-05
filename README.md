@@ -187,3 +187,8 @@ batchMintNFT: shared (request : vec MintRequest) -> async ();
 getTokenIdentifier : (nat) -> (text) query;
 
 extensions : () -> (vec text) query;
+
+### Transfer support address
+
+By setting principal mapping address, support using address when transfer
+
