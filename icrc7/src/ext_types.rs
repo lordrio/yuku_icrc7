@@ -17,11 +17,7 @@ pub type ExtTokenIndex = u32;
 
 pub type Extension = String;
 
-pub static EXTENSIONS: [&str; 3] = [
-    "@ext/common",
-    "@ext/allowance",
-    "@ext/nonfungible",
-];
+pub static EXTENSIONS: [&str; 3] = ["@ext/common", "@ext/allowance", "@ext/nonfungible"];
 
 impl TokenIdentifier {
     pub fn parse_token_identifier(canister_id: Principal, index: u128) -> Self {
@@ -193,7 +189,7 @@ pub enum ExtBearerResult {
     Err(ExtCommonError),
 }
 
-#[derive(CandidType, Deserialize, Clone, Debug)]
+#[derive(CandidType, Deserialize, Clone, Debug, Default)]
 pub struct ExtMetadataType {
     pub metadata: Option<Vec<u8>>,
 }
@@ -207,16 +203,24 @@ impl ExtMetadataType {
 }
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
+pub struct ExtFungibleMetadataType {
+    pub name: String,
+    pub symbol: String,
+    pub decimals: u8,
+    pub metadata: Option<Vec<u8>>,
+}
+
+#[derive(CandidType, Deserialize, Clone, Debug)]
 pub enum ExtMetadata {
     #[serde(rename = "fungible")]
-    Fungible,
+    Fungible(ExtFungibleMetadataType),
     #[serde(rename = "nonfungible")]
     Nonfungible(ExtMetadataType),
 }
 
 impl Default for ExtMetadata {
     fn default() -> Self {
-        ExtMetadata::Fungible
+        ExtMetadata::Nonfungible(ExtMetadataType::default())
     }
 }
 

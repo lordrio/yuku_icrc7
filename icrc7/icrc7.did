@@ -42,7 +42,16 @@ type ExtBalanceArg = record { token : text; user : User };
 type ExtBalanceResult = variant { ok : nat; err : ExtCommonError };
 type ExtBearerResult = variant { ok : text; err : ExtCommonError };
 type ExtCommonError = variant { InvalidToken : text; Other : text };
-type ExtMetadata = variant { fungible; nonfungible : ExtMetadataType };
+type ExtFungibleMetadataType = record {
+  decimals : nat8;
+  metadata : opt vec nat8;
+  name : text;
+  symbol : text;
+};
+type ExtMetadata = variant {
+  fungible : ExtFungibleMetadataType;
+  nonfungible : ExtMetadataType;
+};
 type ExtMetadataResult = variant { ok : ExtMetadata; err : ExtCommonError };
 type ExtMetadataType = record { metadata : opt vec nat8 };
 type ExtMintArg = record { to : User; metadata : opt vec nat8 };
