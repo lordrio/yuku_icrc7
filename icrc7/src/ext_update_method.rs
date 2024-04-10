@@ -6,6 +6,7 @@ use crate::ext_types::{
     AccountIdentifier, AccountIdentifierHex, ExtApproveArg, ExtMintArg, ExtTokenIndex,
     ExtTransferArg, ExtTransferResult, TokenIdentifier,
 };
+use crate::guards::owner_guard;
 use crate::state::STATE;
 
 #[update(name = "transfer")]
@@ -51,7 +52,7 @@ pub fn ext_set_account_mapping() -> Option<AccountIdentifierHex> {
     })
 }
 
-#[update(name = "updateMetadata")]
+#[update(name = "updateMetadata", guard = "owner_guard")]
 pub fn ext_update_metadata(token: TokenIdentifier, description: String) -> bool {
     STATE.with(|s| s.borrow_mut().ext_update_metadata(token, description))
 }
