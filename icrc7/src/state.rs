@@ -1088,6 +1088,25 @@ impl State {
         }
     }
 
+    pub fn ext_update_metadata(&mut self, token: TokenIdentifier, description: String) -> bool {
+        let canister_id = ic_cdk::api::id();
+
+        let token_id = match token.parse_token_index(canister_id) {
+            Ok(token_id) => token_id,
+            Err(_) => return false,
+        };
+
+        let token = self.tokens.get(&token_id);
+
+        if let Some(mut token_info) = token {
+            token_info.token_description = Some(description);
+            self.tokens.insert(token_id, token_info);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     pub fn ext_get_registry(&self) -> Vec<(ExtTokenIndex, AccountIdentifierHex)> {
         let mut token_list = vec![];
         self.tokens.iter().for_each(|(id, ref token)| {
