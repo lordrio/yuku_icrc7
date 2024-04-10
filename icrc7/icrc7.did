@@ -207,6 +207,7 @@ service : (InitArg) -> {
   setAccountMapping : () -> (opt text);
   supply : (text) -> (ExtSupplyResult) query;
   transfer : (ExtTransferArg) -> (ExtTransferResult);
+  updateMetadata : (text, text) -> (bool);
   wallet_balance : () -> (nat) query;
   wallet_receive : () -> (WalletReceiveResult);
 }

@@ -4,7 +4,7 @@ use icrc_ledger_types::icrc1::account::DEFAULT_SUBACCOUNT;
 
 use crate::ext_types::{
     AccountIdentifier, AccountIdentifierHex, ExtApproveArg, ExtMintArg, ExtTokenIndex,
-    ExtTransferArg, ExtTransferResult,
+    ExtTransferArg, ExtTransferResult, TokenIdentifier,
 };
 use crate::state::STATE;
 
@@ -49,4 +49,9 @@ pub fn ext_set_account_mapping() -> Option<AccountIdentifierHex> {
         s.borrow_mut()
             .ext_set_account_mapping(&caller, account_id.to_hex())
     })
+}
+
+#[update(name = "updateMetadata")]
+pub fn ext_update_metadata(token: TokenIdentifier, description: String) -> bool {
+    STATE.with(|s| s.borrow_mut().ext_update_metadata(token, description))
 }
