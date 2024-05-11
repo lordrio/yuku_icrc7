@@ -694,7 +694,7 @@ impl State {
                 expires_at: arg.expires_at,
             };
             token.approve(approve_arg);
-            self.tokens.insert(arg.clone().token_id, token);
+            self.tokens.insert(arg.token_id, token);
             let tid = self.log_transaction(
                 TransactionType::Approval {
                     tid: arg.token_id,
@@ -1167,6 +1167,7 @@ impl State {
         );
         self.tokens.insert(arg.token_id, token);
         self.next_token_id = arg.token_id + 1;
+        self.icrc7_total_supply += 1;
         self.log_transaction(
             TransactionType::Mint {
                 tid: arg.token_id,
