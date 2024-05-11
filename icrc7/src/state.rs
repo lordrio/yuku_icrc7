@@ -510,6 +510,7 @@ impl State {
         );
         self.tokens.insert(arg.token_id, token);
         self.next_token_id = arg.token_id + 1;
+        self.icrc7_total_supply += 1;
         let txn_id = self.log_transaction(
             TransactionType::Mint {
                 tid: arg.token_id,
