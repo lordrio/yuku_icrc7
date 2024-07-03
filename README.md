@@ -191,20 +191,6 @@ extensions : () -> (vec text) query;
 ### Transfer support address
 
 By setting principal mapping address, support using address when transfer
-
-
-## Online Canister List
-```bash
-l3lzd-haaaa-aaaah-adzra-cai
-
-kkbh4-7iaaa-aaaah-adzuq-cai
-
-kedku-eyaaa-aaaah-adzvq-cai
-
-k7gwr-6aaaa-aaaah-adzxa-cai
-
-kyhqf-tyaaa-aaaah-adzxq-cai
-
 if26n-aqaaa-aaaah-adzya-cai
 
 45da3-liaaa-aaaah-ad2mq-cai
